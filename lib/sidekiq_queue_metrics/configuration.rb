@@ -1,5 +1,5 @@
 module Sidekiq::QueueMetrics
-  def self.start_recording(config)
+  def self.init(config)
     config.server_middleware do |chain|
       chain.add Sidekiq::QueueMetrics::JobSuccessMonitor
     end
