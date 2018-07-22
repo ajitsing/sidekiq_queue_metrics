@@ -1,10 +1,10 @@
-require_relative 'storage'
-
 module Sidekiq::QueueMetrics
-  def self.configure(config)
+  def self.start_recording(config)
     config.server_middleware do |chain|
       chain.add Sidekiq::QueueMetrics::JobSuccessMonitor
     end
+
+    config.death_handlers << Sidekiq::QueueMetrics::JobDeathMonitor.proc
   end
 
   def self.storage_location=(key)
