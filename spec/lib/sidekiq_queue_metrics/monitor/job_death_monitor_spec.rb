@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Sidekiq::QueueMetrics::JobDeathMonitor do
   describe '#call' do
     let(:job) {{'queue' => 'mailer_queue'}}

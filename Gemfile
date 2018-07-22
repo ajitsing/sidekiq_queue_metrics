@@ -1,4 +1,5 @@
 source :rubygems
 
-gem 'sidekiq', '>= 3.0'
+gem 'sidekiq'
+gem 'eldritch'
 gem 'rspec'

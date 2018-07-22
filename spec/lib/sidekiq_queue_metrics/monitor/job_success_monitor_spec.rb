@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Sidekiq::QueueMetrics::JobSuccessMonitor do
   describe '#call' do
     let(:job) {double('job')}

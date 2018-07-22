@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths               =   ["lib"]
 
   s.add_dependency                  'sidekiq', '>= 3.0'
+  s.add_dependency                  'eldritch'
   s.add_development_dependency      "bundler", "~> 1.5"
   s.add_development_dependency      'rspec'
 end
