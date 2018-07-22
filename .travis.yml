@@ -8,4 +8,4 @@ before_install:
   - rvm use 2.4.0
 
 script:
-- "rspec"
+- "bundle exec rspec"
