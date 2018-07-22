@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors                     =   ['Ajit Singh']
   s.email                       =   'jeetsingh.ajit@gamil.com'
   s.license                     =   'MIT'
-  s.homepage                    =   'https://github.com/ajitsing/sidkiq_queue_metrics'
+  s.homepage                    =   'https://github.com/ajitsing/sidekiq_queue_metrics'
 
   s.files                       =   `git ls-files -z`.split("\x0")
   s.executables                 =   s.files.grep(%r{^bin/}) { |f| File.basename(f)  }
