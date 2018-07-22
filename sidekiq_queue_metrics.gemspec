@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require_relative './lib/sidekiq_queue_metrics/version.rb'
 
 Gem::Specification.new do |s|
-  s.name                        =   'sidkiq_queue_metrics'
+  s.name                        =   'sidekiq_queue_metrics'
   s.version                     =   Sidekiq::QueueMetrics::VERSION
   s.summary                     =   'Records stats of each sidekiq queue and exposes APIs to retrieve them'
   s.authors                     =   ['Ajit Singh']
