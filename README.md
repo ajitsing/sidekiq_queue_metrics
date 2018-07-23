@@ -23,6 +23,12 @@ end
 ```
 
 ## Usage
+sidekiq_queue_metrics adds a new tab `Queue Metrics` in Sidekiq UI.
+
+<img src="https://github.com/ajitsing/ScreenShots/blob/master/sidekiq_queue_metrics/sidekiq_queue_metrics.png"/>
+
+You can also use the below apis to directly consume the queue metrics.
+
 Fetch stats of all queues:
 ```ruby
 Sidekiq::QueueMetrics.fetch
