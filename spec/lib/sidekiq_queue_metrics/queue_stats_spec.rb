@@ -51,10 +51,11 @@ describe Sidekiq::QueueMetrics do
     end
 
     it 'should return Sidekiq::QueueMetrics for all sidekiq queues' do
-      jobs_in_retry_queue = []
+      jobs_in_retry_queue = scheduled_jobs = []
 
       expect(Sidekiq::QueueMetrics::Storage).to receive(:get_stats).and_return(nil)
       expect(Sidekiq::RetrySet).to receive(:new).and_return(jobs_in_retry_queue)
+      expect(Sidekiq::ScheduledSet).to receive(:new).and_return(scheduled_jobs)
       expect(Sidekiq::Queue).to receive(:new).with('mailer_queue').and_return(OpenStruct.new(size: 0))
       expect(Sidekiq::Queue).to receive(:new).with('heavy_jobs_queue').and_return(OpenStruct.new(size: 0))
 
