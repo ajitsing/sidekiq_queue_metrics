@@ -4,7 +4,7 @@ module Sidekiq::QueueMetrics
   class << self
     def fetch
       queues = []
-      success_and_failed_stats = enqueued_jobs = retry_stats = {}
+      success_and_failed_stats = enqueued_jobs =  scheduled_jobs = retry_stats = {}
       together do
         async do
           queues = Sidekiq::Queue.all.map(&:name).map(&:to_s)
@@ -13,6 +13,7 @@ module Sidekiq::QueueMetrics
 
         async {success_and_failed_stats = fetch_success_and_failed_stats}
         async {retry_stats = fetch_retry_stats}
+        async {scheduled_jobs = fetch_scheduled_stats}
       end
 
       queues.map do |queue|
@@ -24,6 +25,7 @@ module Sidekiq::QueueMetrics
 
         stats['enqueued'] = val_or_default(enqueued_jobs[queue])
         stats['in_retry'] = val_or_default(retry_stats[queue])
+        stats['scheduled'] = val_or_default(scheduled_jobs[queue])
         {queue => stats}
       end.reduce({}, :merge)
     end
@@ -38,6 +40,10 @@ module Sidekiq::QueueMetrics
 
     def fetch_retry_stats
       Sidekiq::RetrySet.new.group_by(&:queue).map {|queue, jobs| [queue, jobs.count]}.to_h
+    end
+
+    def fetch_scheduled_stats
+      Sidekiq::ScheduledSet.new.group_by(&:queue).map {|queue, jobs| [queue, jobs.count]}.to_h
     end
 
     private
