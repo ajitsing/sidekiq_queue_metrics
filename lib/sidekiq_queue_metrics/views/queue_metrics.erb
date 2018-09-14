@@ -22,6 +22,10 @@
     font-size: 1.1em;
     font-weight: bold;
   }
+
+  .center {
+    text-align: center;
+  }
 </style>
 
 <header class="row">
@@ -35,13 +39,13 @@
     <thead>
     <tr>
       <th><span class="heading"><%= queue %></span></th>
-      <th style="width: 30%"><span class="heading">Count</span></th>
+      <th style="width: 30%"  class="center"><span class="heading">Count</span></th>
     </tr>
     </thead>
     <% metrics.each do |metric_name, count| %>
       <tr>
         <td><%= metric_name.split('_').map(&:capitalize).join(' ') %></td>
-        <td><span class="<%= metric_name %>_count"><%= count %></span></td>
+        <td class="center"><span class="<%= metric_name %>_count"><%= count %></span></td>
       </tr>
     <% end %>
   </table>
