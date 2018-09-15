@@ -37,8 +37,8 @@ Sidekiq::QueueMetrics.fetch
 Output:
 ```ruby
 {
-  "mailer_queue" => {"processed" => 5, "failed" => 1, "enqueued" => 2, "in_retry" => 0},
-  "default_queue" => {"processed" => 10, "failed" => 0, "enqueued" => 1, "in_retry" => 1}
+  "mailer_queue" => {"processed" => 5, "failed" => 1, "enqueued" => 2, "in_retry" => 0, "scheduled" => 0},
+  "default_queue" => {"processed" => 10, "failed" => 0, "enqueued" => 1, "in_retry" => 1, "scheduled" => 2}
 }
 ```
 
