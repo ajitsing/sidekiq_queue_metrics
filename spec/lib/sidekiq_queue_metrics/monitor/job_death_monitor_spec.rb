@@ -8,6 +8,7 @@ describe Sidekiq::QueueMetrics::JobDeathMonitor do
       it 'should create stats key and add stats of queue' do
         expect(Sidekiq::QueueMetrics::Storage).to receive(:get_stats).and_return(nil)
         expect(Sidekiq::QueueMetrics::Storage).to receive(:set_stats).with({mailer_queue: {failed: 1}}.to_json)
+        expect(Sidekiq::QueueMetrics::Storage).to receive(:add_failed_job).with(job)
 
         monitor.call(job)
       end
@@ -15,13 +16,15 @@ describe Sidekiq::QueueMetrics::JobDeathMonitor do
 
     context 'when stats exists' do
       it 'should create a new queue when it does not exist' do
+        job_queue = {'queue' => 'job_queue'}
         existing_stats = {mailer_queue: {failed: 1}}.to_json
         expected_stats = {mailer_queue: {failed: 1}, job_queue: {failed: 1}}.to_json
 
         expect(Sidekiq::QueueMetrics::Storage).to receive(:get_stats).and_return(existing_stats)
         expect(Sidekiq::QueueMetrics::Storage).to receive(:set_stats).with(expected_stats)
+        expect(Sidekiq::QueueMetrics::Storage).to receive(:add_failed_job).with(job_queue)
 
-        monitor.call({'queue' => 'job_queue'})
+        monitor.call(job_queue)
       end
 
       it 'should update existing queue' do
@@ -30,6 +33,7 @@ describe Sidekiq::QueueMetrics::JobDeathMonitor do
 
         expect(Sidekiq::QueueMetrics::Storage).to receive(:get_stats).and_return(existing_stats)
         expect(Sidekiq::QueueMetrics::Storage).to receive(:set_stats).with(expected_stats)
+        expect(Sidekiq::QueueMetrics::Storage).to receive(:add_failed_job).with(job)
 
         monitor.call(job)
       end
@@ -40,6 +44,7 @@ describe Sidekiq::QueueMetrics::JobDeathMonitor do
 
         expect(Sidekiq::QueueMetrics::Storage).to receive(:get_stats).and_return(existing_stats)
         expect(Sidekiq::QueueMetrics::Storage).to receive(:set_stats).with(expected_stats)
+        expect(Sidekiq::QueueMetrics::Storage).to receive(:add_failed_job).with(job)
 
         monitor.call(job)
       end

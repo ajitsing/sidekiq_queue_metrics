@@ -4,9 +4,13 @@ module Sidekiq::QueueMetrics
   class JobDeathMonitor < Monitor
     def self.proc
       Proc.new do |job, exception|
-        queue = job['queue']
-        JobDeathMonitor.new.monitor(queue)
+        JobDeathMonitor.new.monitor(job)
       end
+    end
+
+    def monitor(job)
+      super(job['queue'])
+      Storage.add_failed_job(job)
     end
 
     def status_counter
