@@ -39,12 +39,20 @@
     <thead>
     <tr>
       <th><span class="heading"><%= queue %></span></th>
-      <th style="width: 30%"  class="center"><span class="heading">Count</span></th>
+      <th style="width: 30%" class="center"><span class="heading">Count</span></th>
     </tr>
     </thead>
     <% metrics.each do |metric_name, count| %>
       <tr>
-        <td><%= metric_name.split('_').map(&:capitalize).join(' ') %></td>
+        <td>
+          <% if metric_name == 'failed' %>
+            <a href="<%= "/sidekiq/queue/#{queue}/failed_jobs" %>">
+              <%= metric_name.split('_').map(&:capitalize).join(' ') %>
+            </a>
+          <% else %>
+            <%= metric_name.split('_').map(&:capitalize).join(' ') %>
+          <% end %>
+        </td>
         <td class="center"><span class="<%= metric_name %>_count"><%= count %></span></td>
       </tr>
     <% end %>
