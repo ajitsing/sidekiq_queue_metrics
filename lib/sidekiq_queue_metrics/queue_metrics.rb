@@ -46,6 +46,10 @@ module Sidekiq::QueueMetrics
       Sidekiq::ScheduledSet.new.group_by(&:queue).map {|queue, jobs| [queue, jobs.count]}.to_h
     end
 
+    def failed_jobs(queue)
+      Storage.failed_jobs(queue).reverse
+    end
+
     private
     def val_or_default(val, default = 0)
       val || default

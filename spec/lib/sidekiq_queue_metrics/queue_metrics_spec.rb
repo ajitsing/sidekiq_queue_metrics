@@ -74,4 +74,15 @@ describe Sidekiq::QueueMetrics do
       expect(queue_stats['heavy_jobs_queue']['scheduled']).to be_zero
     end
   end
+
+  describe '#failed_jobs' do
+    it 'should return failed jobs for a queue' do
+      queue = 'default_queue'
+      job_1 = double(:job)
+      job_2 = double(:job)
+      expect(Sidekiq::QueueMetrics::Storage).to receive(:failed_jobs).and_return([job_1, job_2])
+
+      expect(Sidekiq::QueueMetrics.failed_jobs(queue)).to eq([job_2, job_1])
+    end
+  end
 end
