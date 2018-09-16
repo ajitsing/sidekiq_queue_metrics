@@ -11,6 +11,14 @@ module Sidekiq::QueueMetrics
     @storage_location = key
   end
 
+  def self.max_recently_failed_jobs=(count)
+    @max_recently_failed_jobs = count
+  end
+
+  def self.max_recently_failed_jobs
+    @max_recently_failed_jobs || 50
+  end
+
   def self.storage_location
     @storage_location
   end
