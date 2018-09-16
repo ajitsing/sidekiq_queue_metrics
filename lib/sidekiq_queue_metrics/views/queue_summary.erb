@@ -59,7 +59,11 @@
     <tr>
       <td><%= job['class'] %></td>
       <td><%= job['args'].join(', ') %></td>
-      <td><%= relative_time(Time.at(job['enqueued_at'])) %></td>
+      <td>
+        <a href="<%= "/sidekiq/queues/#{@queue}/jobs/#{job['jid']}" %>">
+          <%= relative_time(Time.at(job['enqueued_at'])) %>
+        </a>
+      </td>
       <td><%= job['error_message'] %></td>
     </tr>
   <% end %>
