@@ -5,13 +5,14 @@ module Sidekiq::QueueMetrics
 
       app.get "/queue_metrics" do
         @queue_metrics = Sidekiq::QueueMetrics.fetch
-        render(:erb, File.read(File.join(view_path, "queue_metrics.erb")))
+        render(:erb, File.read(File.join(view_path, "queues_stats.erb")))
       end
 
-      app.get '/queue/:queue_name/failed_jobs' do
+      app.get '/queue/:queue_name/summary' do
         @queue = route_params[:queue_name]
+        @queue_stats = Sidekiq::QueueMetrics.fetch[@queue]
         @failed_jobs = Sidekiq::QueueMetrics.failed_jobs(@queue)
-        render(:erb, File.read(File.join(view_path, "failed_jobs.erb")))
+        render(:erb, File.read(File.join(view_path, "queue_summary.erb")))
       end
     end
   end
