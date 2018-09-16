@@ -23,9 +23,23 @@ end
 ```
 
 ## Usage
-sidekiq_queue_metrics adds a new tab `Queue Metrics` in Sidekiq UI.
+`sidekiq_queue_metrics` adds a new tab `Queue Metrics` in Sidekiq UI. In `Queue Metrics` tab you will see widget of all the queues with latest stats. To checkout individual queue summary click on the queue name. On queue summary page you will see all the stats of the queue along with 50 recently failed jobs. To see the details of the failed job click on the enqueued time column of the failed job row.
+
+The failed job count is configuratble. You can configure your desired count using below config.
+
+```ruby
+Sidekiq::QueueMetrics.max_recently_failed_jobs = 100
+```
 
 <img src="https://github.com/ajitsing/ScreenShots/blob/master/sidekiq_queue_metrics/sidekiq_queue_metrics.png"/>
+
+### Queue Summary
+
+<img src="https://github.com/ajitsing/ScreenShots/blob/master/sidekiq_queue_metrics/queue_summary.png"/>
+
+### Failed Job
+
+<img src="https://github.com/ajitsing/ScreenShots/blob/master/sidekiq_queue_metrics/failed_job.png"/>
 
 You can also use the below apis to directly consume the queue metrics.
 
