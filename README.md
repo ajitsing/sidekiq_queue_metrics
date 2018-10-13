@@ -3,6 +3,7 @@ Records stats of each sidekiq queue and exposes APIs to retrieve them
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/MIT)
 [![Gem Version](https://badge.fury.io/rb/sidekiq_queue_metrics.svg)](https://badge.fury.io/rb/sidekiq_queue_metrics)
+[![HitCount](http://hits.dwyl.io/ajitsing/Sherlock.svg)](http://hits.dwyl.io/ajitsing/sidekiq_queue_metrics)
 ![Gem Downloads](http://ruby-gem-downloads-badge.herokuapp.com/sidekiq_queue_metrics?type=total)
 [![Build Status](https://travis-ci.org/ajitsing/sidekiq_queue_metrics.svg?branch=master)](https://travis-ci.org/ajitsing/sidekiq_queue_metrics)
 [![Twitter Follow](https://img.shields.io/twitter/follow/Ajit5ingh.svg?style=social)](https://twitter.com/Ajit5ingh)
