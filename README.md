@@ -1,6 +1,7 @@
 # sidekiq_queue_metrics
 Records stats of each sidekiq queue and exposes APIs to retrieve them
 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/ajitsing/sidekiq_queue_metrics/graphs/commit-activity)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/MIT)
 [![Gem Version](https://badge.fury.io/rb/sidekiq_queue_metrics.svg)](https://badge.fury.io/rb/sidekiq_queue_metrics)
 [![HitCount](http://hits.dwyl.io/ajitsing/sidekiq_queue_metrics.svg)](http://hits.dwyl.io/ajitsing/sidekiq_queue_metrics)
