@@ -17,6 +17,26 @@
     font-weight: bold;
   }
 
+  .animate_processed {
+    animation:blinking_processed_text 0.5s 1;
+  }
+
+  .animate_failed {
+    animation:blinking_failed_text 0.5s 1;
+  }
+
+  @keyframes blinking_processed_text{
+    0%{background-color: transparent;}
+    50%{background-color: rgba(35, 130, 13, 0.9);}
+    100%{background-color: transparent;}
+  }
+
+  @keyframes blinking_failed_text{
+    0%{background-color: transparent;}
+    50%{background-color: rgba(158, 19, 19, 0.96);}
+    100%{background-color: transparent;}
+  }
+
   .failed_count {
     color: rgba(158, 19, 19, 0.96);
     font-size: 1.1em;
@@ -46,10 +66,10 @@
       <th style="width: 30%" class="center"><span class="heading">Count</span></th>
     </tr>
     </thead>
-    <% metrics.each do |metric_name, count| %>
+    <% metrics.each do |metric_name, detail| %>
       <tr>
         <td><%= metric_name.split('_').map(&:capitalize).join(' ') %></td>
-        <td class="center"><span class="<%= metric_name %>_count"><%= count %></span></td>
+        <td class="center"><span class="<%= metric_name %>_count <%= detail['animate'] ? "animate_#{metric_name}" : "" %>"><%= detail['count'] %></span></td>
       </tr>
     <% end %>
   </table>
