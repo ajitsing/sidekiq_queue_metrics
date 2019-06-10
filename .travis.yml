@@ -9,3 +9,4 @@ before_install:
 
 script:
 - "bundle exec rspec"
+- "SIDEKIQ_VERSION=4.2.10 bundle && bundle exec rspec"

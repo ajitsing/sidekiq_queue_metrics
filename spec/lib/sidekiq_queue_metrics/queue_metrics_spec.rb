@@ -7,6 +7,26 @@ describe Sidekiq::QueueMetrics do
 
   before { redis_connection.flushall }
 
+  describe '#init' do
+    if Sidekiq::QueueMetrics.support_death_handlers?
+      it 'attach the expected listeners for failed job' do
+        Sidekiq::QueueMetrics.init(Sidekiq)
+
+        expect(Sidekiq.death_handlers).to_not be_empty
+      end
+    else
+      before do
+        class TestWorker; include Sidekiq::Worker; end
+      end
+
+      it 'attach the expected listeners for failed job' do
+        Sidekiq::QueueMetrics.init(Sidekiq)
+
+        expect(TestWorker.sidekiq_retries_exhausted_block).to_not be_nil
+      end
+    end
+  end
+
   describe '#fetch' do
     before(:each) do
       queues = [OpenStruct.new(name: :mailer_queue), OpenStruct.new(name: :heavy_jobs_queue)]
