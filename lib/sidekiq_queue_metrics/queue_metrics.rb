@@ -1,6 +1,8 @@
 require 'sidekiq_queue_metrics/storage'
 
 module Sidekiq::QueueMetrics
+  extend Eldritch::DSL
+
   class << self
     def fetch
       queues = []
