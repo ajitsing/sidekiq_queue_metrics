@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    sidekiq_queue_metrics (2.1.1)
+      eldritch
+      sidekiq (>= 5.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -6,6 +13,8 @@ GEM
     diff-lcs (1.3)
     eldritch (1.1.3)
       reentrant_mutex (~> 1.1.0)
+    fakeredis (0.7.0)
+      redis (>= 3.2, < 5.0)
     rack (2.0.6)
     rack-protection (2.0.3)
       rack
@@ -34,9 +43,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 1.5)
   eldritch
+  fakeredis
   rspec
   sidekiq
+  sidekiq_queue_metrics!
 
 BUNDLED WITH
-   1.16.1
+   1.16.6

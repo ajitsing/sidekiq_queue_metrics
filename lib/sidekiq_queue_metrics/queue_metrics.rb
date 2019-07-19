@@ -6,34 +6,34 @@ module Sidekiq::QueueMetrics
   class << self
     def fetch
       queues = []
-      success_and_failed_stats = enqueued_jobs =  scheduled_jobs = retry_stats = {}
+      enqueued_jobs = scheduled_jobs = retry_stats = {}
+
       together do
         async do
           queues = Sidekiq::Queue.all.map(&:name).map(&:to_s)
           queues.each {|queue| enqueued_jobs[queue] = fetch_enqueued_jobs(queue)}
         end
 
-        async {success_and_failed_stats = fetch_success_and_failed_stats}
         async {retry_stats = fetch_retry_stats}
         async {scheduled_jobs = fetch_scheduled_stats}
       end
 
-      queues.map do |queue|
-        stats = {'processed' => 0, 'failed' => 0}
-        if success_and_failed_stats.has_key?(queue)
-          stats['processed'] = val_or_default(success_and_failed_stats[queue]['processed'])
-          stats['failed'] = val_or_default(success_and_failed_stats[queue]['failed'])
-        end
+      queues.reduce({}) do |stats, queue|
+        stats[queue] = {
+          'enqueued' => val_or_default(enqueued_jobs[queue]),
+          'in_retry' => val_or_default(retry_stats[queue]),
+          'scheduled' => val_or_default(scheduled_jobs[queue])
+        }.merge(fetch_success_and_failed_stats(queue))
 
-        stats['enqueued'] = val_or_default(enqueued_jobs[queue])
-        stats['in_retry'] = val_or_default(retry_stats[queue])
-        stats['scheduled'] = val_or_default(scheduled_jobs[queue])
-        {queue => stats}
-      end.reduce({}, :merge)
+        stats
+      end
     end
 
-    def fetch_success_and_failed_stats
-      JSON.load(Storage.get_stats || '{}')
+    def fetch_success_and_failed_stats(queue)
+      default_metric_values = { 'processed' => 0, 'failed' => 0 }
+      default_metric_values.merge(
+        Sidekiq::QueueMetrics::Storage.get_stats(queue)
+      )
     end
 
     def fetch_enqueued_jobs(queue)
@@ -52,8 +52,7 @@ module Sidekiq::QueueMetrics
       Storage.failed_jobs(queue).reverse
     end
 
-    private
-    def val_or_default(val, default = 0)
+    private def val_or_default(val, default = 0)
       val || default
     end
   end
