@@ -3,6 +3,7 @@ PATH
   specs:
     sidekiq_queue_metrics (2.1.1)
       eldritch
+      redlock
       sidekiq (>= 5.1)
 
 GEM
@@ -19,6 +20,8 @@ GEM
     rack-protection (2.0.3)
       rack
     redis (4.0.1)
+    redlock (1.0.1)
+      redis (>= 3.0.0, < 5.0)
     reentrant_mutex (1.1.1)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
