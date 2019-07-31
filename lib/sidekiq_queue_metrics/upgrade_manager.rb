@@ -7,12 +7,16 @@ module Sidekiq
         @@logger ||= Logger.new(STDOUT)
       end
 
-      # Check if an upgrade is needed and it can be done without user intervention,
-      # otherwise it will fail with an exception.
+      # Check if an upgrade is needed and it's not already in progress.
+      # If it's in progress, it will block during that time waiting for the upgrade to complete.
       #
-      # @raises [Redlock::LockError] when upgrade can't be performed because
+      # In case the lock is not released because the upgrade is taking too long
+      # it will raise an exception
+      #
+      # @raises [Redlock::LockError]
+      #
       def self.upgrade_if_needed
-        adcquire_lock do
+        acquire_lock do
           return unless upgrade_needed?
 
           v2_to_v3_upgrade
@@ -56,7 +60,7 @@ module Sidekiq
         Sidekiq.redis_pool.with { |conn| conn.exists(Helpers.stats_key) }
       end
 
-      def self.adcquire_lock(&block)
+      def self.acquire_lock(&block)
         Sidekiq.redis_pool.with do |conn|
           lock_manager = Redlock::Client.new([conn], {
             retry_count:   5,
