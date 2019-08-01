@@ -1,41 +1,37 @@
 module Sidekiq::QueueMetrics
   class Storage
-    FAILED_JOBS_KEY = 'failed_jobs'.freeze
-
     class << self
-      def set_stats(key = stats_key, value)
+      def increment_stat(queue, stat, value = 1)
         Sidekiq.redis_pool.with do |conn|
-          conn.set(key, value)
+          conn.hincrby(Helpers.build_queue_stats_key(queue), stat, value)
         end
       end
 
-      def get_stats(key = stats_key)
-        Sidekiq.redis_pool.with do |conn|
-          conn.get(key)
+      def get_stats(queue)
+        stats = Sidekiq.redis_pool.with do |conn|
+          conn.hgetall(Helpers.build_queue_stats_key(queue))
         end
+
+        Helpers.convert_hash_values(stats) { |value| value.to_i }
       end
 
       def add_failed_job(job, max_count = Sidekiq::QueueMetrics.max_recently_failed_jobs)
+        queue = job['queue']
+
         Sidekiq.redis_pool.with do |conn|
-          queue = job['queue']
-          failed_jobs = JSON.parse(conn.get("#{FAILED_JOBS_KEY}:#{queue}") || '[]')
+          failed_job_key_for_queue = Helpers.build_failed_jobs_key(queue)
 
-          if failed_jobs.size >= max_count
-            (failed_jobs.size - max_count + 1).times {failed_jobs.shift}
-          end
-
-          conn.set("#{FAILED_JOBS_KEY}:#{queue}", (failed_jobs << job).to_json)
+          conn.lpush(failed_job_key_for_queue, Sidekiq.dump_json(job))
+          conn.rpop(failed_job_key_for_queue) if conn.llen(failed_job_key_for_queue) >= max_count
         end
       end
 
       def failed_jobs(queue)
-        Sidekiq.redis_pool.with do |conn|
-          JSON.parse(conn.get("#{FAILED_JOBS_KEY}:#{queue}") || '[]')
+        result = Sidekiq.redis_pool.with do |conn|
+          conn.lrange(Helpers.build_failed_jobs_key(queue), 0, -1)
         end
-      end
 
-      def stats_key
-        Sidekiq::QueueMetrics.storage_location || 'queue_stats'
+        result.map(&Sidekiq.method(:load_json))
       end
     end
   end

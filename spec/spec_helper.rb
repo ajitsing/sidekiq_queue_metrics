@@ -15,6 +15,8 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 #
 
+require 'fakeredis/rspec'
+
 require './lib/sidekiq_queue_metrics'
 
 RSpec.configure do |config|

@@ -5,6 +5,7 @@ module Sidekiq::QueueMetrics
     end
 
     config.death_handlers << Sidekiq::QueueMetrics::JobDeathMonitor.proc
+    config.on(:startup) { UpgradeManager.upgrade_if_needed }
   end
 
   def self.storage_location=(key)
