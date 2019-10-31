@@ -14,15 +14,21 @@ describe Sidekiq::QueueMetrics do
 
         expect(Sidekiq.death_handlers).to_not be_empty
       end
-    else
-      before do
-        class TestWorker; include Sidekiq::Worker; end
-      end
 
-      it 'attach the expected listeners for failed job' do
+      it 'doesn\'t attach the JobDeathMiddleware to the server middleware chain' do
         Sidekiq::QueueMetrics.init(Sidekiq)
 
-        expect(TestWorker.sidekiq_retries_exhausted_block).to_not be_nil
+        expect(
+          Sidekiq.server_middleware.entries.select { |x| x.klass == Sidekiq::QueueMetrics::JobDeathMiddleware }
+        ).to be_empty
+      end
+    else
+      it 'attach the JobDeathMiddleware to the server middleware chain' do
+        Sidekiq::QueueMetrics.init(Sidekiq)
+
+        expect(
+          Sidekiq.server_middleware.entries.select { |x| x.klass == Sidekiq::QueueMetrics::JobDeathMiddleware }
+        ).not_to be_empty
       end
     end
   end
