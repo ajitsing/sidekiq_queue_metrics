@@ -37,7 +37,7 @@ module Sidekiq
 
             failed_jobs_key = Helpers.build_failed_jobs_key(queue)
 
-            if conn.exists(failed_jobs_key) && conn.type(failed_jobs_key) == 'string'
+            if conn.exists?(failed_jobs_key) && conn.type(failed_jobs_key) == 'string'
               temporal_failed_key = "_#{failed_jobs_key}"
 
               failed_jobs = JSON.parse(conn.get(Helpers.build_failed_jobs_key(queue)) || '[]')
@@ -57,7 +57,7 @@ module Sidekiq
       end
 
       def self.upgrade_needed?
-        Sidekiq.redis_pool.with { |conn| conn.exists(Helpers.stats_key) }
+        Sidekiq.redis_pool.with { |conn| conn.exists?(Helpers.stats_key) }
       end
 
       def self.acquire_lock(&block)
