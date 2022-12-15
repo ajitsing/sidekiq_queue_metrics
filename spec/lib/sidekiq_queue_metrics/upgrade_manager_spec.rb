@@ -37,7 +37,7 @@ describe Sidekiq::QueueMetrics::UpgradeManager do
       it 'should delete the old stats key' do
         Sidekiq::QueueMetrics::UpgradeManager.v2_to_v3_upgrade
 
-        expect(redis_connection.exists(Sidekiq::QueueMetrics::Helpers.stats_key)).to be_falsey
+        expect(redis_connection.exists?(Sidekiq::QueueMetrics::Helpers.stats_key)).to be_falsey
       end
 
       it 'should set the previous values into the new stats format' do
@@ -66,8 +66,8 @@ describe Sidekiq::QueueMetrics::UpgradeManager do
 
         Sidekiq::QueueMetrics::UpgradeManager.v2_to_v3_upgrade
 
-        expect(redis_connection.exists(mailer_temporal_key)).to be_falsey
-        expect(redis_connection.exists(other_temporal_key)).to be_falsey
+        expect(redis_connection.exists?(mailer_temporal_key)).to be_falsey
+        expect(redis_connection.exists?(other_temporal_key)).to be_falsey
       end
     end
 
